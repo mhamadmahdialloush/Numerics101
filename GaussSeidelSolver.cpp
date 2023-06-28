@@ -7,8 +7,8 @@ GaussSeidelSolver::GaussSeidelSolver(Matrix& A, Vector& x, Vector& b)
 
 }
 
-GaussSeidelSolver::GaussSeidelSolver(Matrix& A, Vector& x, Vector& b, int min_iters, int max_iters, double tolerance, double relaxation_factor)
-	: Solver(A, x, b, linear_solver::gauss_seidel, min_iters, max_iters, tolerance, relaxation_factor)
+GaussSeidelSolver::GaussSeidelSolver(Matrix& A, Vector& x, Vector& b, int min_iters, int max_iters, double tolerance)
+	: Solver(A, x, b, linear_solver::gauss_seidel, min_iters, max_iters, tolerance, 1)
 {
 
 }
@@ -21,9 +21,6 @@ double GaussSeidelSolver::solve()
 	int n = x_.size();
 
 	init_residual_ = calc_res();
-
-	Vector x_new(x_);
-	Vector y(n);
 
 	for (int iter = 0; iter < max_iters_; iter++)
 	{

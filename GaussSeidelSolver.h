@@ -17,7 +17,7 @@ class GaussSeidelSolver: public Solver
 
 public:
 	GaussSeidelSolver(Matrix& A, Vector& x, Vector& b);
-	GaussSeidelSolver(Matrix& A, Vector& x, Vector& b, int min_iters, int max_iters, double tolerance, double relaxation_factor);
+	GaussSeidelSolver(Matrix& A, Vector& x, Vector& b, int min_iters, int max_iters, double tolerance);
 
 
 
