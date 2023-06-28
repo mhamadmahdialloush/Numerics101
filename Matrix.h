@@ -1,0 +1,51 @@
+
+#ifndef Matrix_h
+#define Matrix_h
+
+
+#include <iostream>
+#include <vector>
+
+
+using namespace std;
+
+
+
+class Vector;
+
+
+
+class Matrix
+{
+private:
+
+    vector<vector<double>> data_;
+
+    double determinant(Matrix& A, int n);
+    void adjoint(Matrix& A, Matrix& adj);
+    bool inverse(Matrix& A, Matrix& inverse);
+    void get_cofactor(Matrix& A, Matrix& temp, int p, int q, int n);
+
+public:
+
+    Matrix(int m, int n);
+
+    int rows(void) const { return static_cast<int>(data_.size()); };
+    int cols(void) const { return static_cast<int>(data_[0].size()); };
+
+
+    vector<double>& operator[] (int i) { return data_[i]; };
+    const vector<double>& operator[] (int i) const { return data_[i]; };
+
+    double determinant();
+    Matrix inverse();
+};
+
+
+Vector operator*(const Matrix& A, const Vector& v);
+Matrix operator*(const Matrix& A1, const Matrix& A2);
+
+ostream& operator<<(ostream& os, const Matrix& A);
+
+
+#endif // !Matrix_h
