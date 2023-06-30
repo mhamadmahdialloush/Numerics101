@@ -49,7 +49,7 @@ Vector operator+(const Vector& v1, const Vector& v2);
 
 Vector operator-(const Vector& v1, const Vector& v2);
 
-ostream& operator<<(ostream& is, const Vector& v);
+ostream& operator<<(ostream& os, const Vector& v);
 
 
 #endif // Vector_h

@@ -47,12 +47,12 @@ Vector operator-(const Vector& v1, const Vector& v2)
 }
 
 
-ostream& operator<<(ostream& is, const Vector& v)
+ostream& operator<<(ostream& os, const Vector& v)
 {
     for (int i = 0; i < v.size(); i++)
     {
-        is << v[i] << endl << endl;
+        os << v[i] << endl << endl;
     }
-    return is;
+    return os;
 }
 

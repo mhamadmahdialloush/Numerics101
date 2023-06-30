@@ -20,9 +20,9 @@ double Matrix::determinant()
 Matrix Matrix::inverse()
 {
 	int n = this->cols();
-	Matrix invMatrix(n, n);
-	inverse((*this), invMatrix);
-	return invMatrix;
+	Matrix inv_matrix(n, n);
+	inverse((*this), inv_matrix);
+	return inv_matrix;
 }
 
 void Matrix::get_cofactor(Matrix& A, Matrix& temp, int p, int q, int n)
