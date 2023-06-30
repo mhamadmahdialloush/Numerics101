@@ -5,7 +5,6 @@
 Matrix::Matrix(int m, int n)
 {
     data_.resize(m);
-
     for (auto& elem : data_)
     {
         elem.resize(n, 0);
