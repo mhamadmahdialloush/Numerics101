@@ -39,6 +39,8 @@ public:
 
     double determinant();
     Matrix inverse();
+
+    void lu_decomposition(Matrix& L, Matrix& U);
 };
 
 

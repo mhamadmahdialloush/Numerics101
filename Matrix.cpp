@@ -193,3 +193,50 @@ ostream& operator<<(ostream& os, const Matrix& A)
     }
     return os;
 }
+
+void Matrix::lu_decomposition(Matrix& L, Matrix& U)
+{
+	Matrix& A = *this;
+	int n = A.rows();
+
+
+	int i = 0, j = 0, k = 0;
+	for (i = 0; i < n; i++)
+	{
+		for (j = 0; j < n; j++)
+		{
+			if (j < i)
+			{
+				L[j][i] = 0;
+			}
+			else
+			{
+				L[j][i] = A[j][i];
+				for (k = 0; k < i; k++)
+				{
+					L[j][i] = L[j][i] - L[j][k] * U[k][i];
+				}
+			}
+		}
+		for (j = 0; j < n; j++)
+		{
+			if (j < i)
+			{
+				U[i][j] = 0;
+			}
+			else if (j == i)
+			{
+				U[i][j] = 1;
+			}
+			else
+			{
+				U[i][j] = A[i][j] / L[i][i];
+				for (k = 0; k < i; k++)
+				{
+					U[i][j] = U[i][j] - ((L[i][k] * U[k][j]) / L[i][i]);
+				}
+			}
+		}
+	}
+}
+}
