@@ -1,4 +1,4 @@
-// Include built-in libraries
+	// Include built-in libraries
 #include <iostream>
 #include <fstream>
 
@@ -16,16 +16,55 @@ using namespace std;
 void TestMatrixOperations(); // Matrix operations
 void TestSolvers(); // Solvers for linear systems 
 void TestSSHeatEquation();
+void TestMatrixMultiplication();
 
 int main()
 {
-	//TestMatrixOperations();
+	TestMatrixOperations();
 	//TestSolvers();
-	TestSSHeatEquation();
-
+	//TestSSHeatEquation();
+	//TestMatrixMultiplication();
 	return 0;
 }
 
+void TestMatrixMultiplication()
+{
+	Matrix A1(4, 3);
+	Matrix A2(3, 4);
+
+	A1[0][0] = 11.0;
+	A1[0][1] = 22.0;
+	A1[0][2] = 3.0;
+
+	A1[1][0] = 1.0;
+	A1[1][1] = 7.0;
+	A1[1][2] = 3.0;
+
+	A1[2][0] = 1.0;
+	A1[2][1] = 2.0;
+	A1[2][2] = 20.0;
+
+	A1[3][0] = 4.0;
+	A1[3][1] = 4.0;
+	A1[3][2] = 30.0;
+
+	A2[0][0] = 1.0;
+	A2[0][1] = 2.0;
+	A2[0][2] = 3.0;
+	A2[0][3] = 3.0;
+
+	A2[1][0] = 8.0;
+	A2[1][1] = 2.0;
+	A2[1][2] = 3.0;
+	A2[1][3] = 2.0;
+
+	A2[2][0] = 1.0;
+	A2[2][1] = 2.0;
+	A2[2][2] = 3.0;
+	A2[2][3] = 1.0;
+
+	cout << "A1xA2:" << endl << A1 * A2 << endl;
+}
 
 
 void TestMatrixOperations()
@@ -79,10 +118,13 @@ void TestMatrixOperations()
 	v[2] = 10;
 	v[3] = 6;
 
+	int s1 = 4;
+
 	cout << "A1xA2:" << endl << A1 * A2 << endl;
 	cout << "A1xv:" << endl << A1 * v << endl;
 	cout << "Inverse:" << endl << A1.inverse() << endl;
 	cout << "Determinant: " << A1.determinant() << endl;
+	cout << "A1 x " << s1 << " = " << endl << A1 * s1 << endl;
 }
 
 void TestSolvers()

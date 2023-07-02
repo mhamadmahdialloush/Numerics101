@@ -161,22 +161,45 @@ Vector operator*(const Matrix& A, const Vector& v)
 
 Matrix operator*(const Matrix& A1, const Matrix& A2)
 {
-	int m = A1.rows();
-	int n = A1.cols();
 
+	if (A1.cols() == A2.rows())
+	{
+		int m = A1.rows();
+		int n = A1.cols();
+		int p = A2.cols();
+		Matrix A(m, p);
+
+		for (int i = 0; i < m; i++)
+		{
+			for (int j = 0; j < p; j++)
+			{
+				for (int k = 0; k < n; k++)
+				{
+					A[i][j] += A1[i][k] * A2[k][j];
+				}
+			}
+		}
+
+		return A;
+	}
+	else
+	{
+		cout << "The multiplication is not accepted as the number of coloumns of the first matrix does not equal the number of rows of the 2nd matrix";
+	}
+}
+
+Matrix operator*(const Matrix& A_, const double s)
+{
+	int m = A_.rows();
+	int n = A_.cols();
 	Matrix A(m, n);
-
-	for (int i = 0; i < m; i++)
+	for (int i =0 ; i < m; i++)
 	{
 		for (int j = 0; j < n; j++)
 		{
-			for (int J = 0; J < n; J++)
-			{
-				A[i][j] += A1[i][J] * A2[J][j];
-			}
+			A[i][j]=A_[i][j]*s;
 		}
 	}
-
 	return A;
 }
 
@@ -237,5 +260,4 @@ void Matrix::lu_decomposition(Matrix& L, Matrix& U)
 			}
 		}
 	}
-}
 }

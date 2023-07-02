@@ -46,6 +46,7 @@ public:
 
 Vector operator*(const Matrix& A, const Vector& v);
 Matrix operator*(const Matrix& A1, const Matrix& A2);
+Matrix operator*(const Matrix& A, const double s);
 
 ostream& operator<<(ostream& os, const Matrix& A);
 
