@@ -11,6 +11,27 @@ Matrix::Matrix(int m, int n)
     }
 }
 
+Matrix::Matrix(std::initializer_list<std::initializer_list<double>> list)
+{
+	const size_t m = list.size();
+	data_.resize(m);
+
+	int i = 0;
+	for (auto it1 = list.begin(); it1 != list.end(); ++it1)
+	{
+		data_[i].resize(it1->size(), 0);
+
+		int j = 0;
+		for (auto it2 = it1->begin(); it2 != it1->end(); ++it2)
+		{
+			data_[i][j] = *it2;
+			j++;
+		}
+
+		i++;
+	}
+}
+
 double Matrix::determinant()
 {
 	return determinant((*this), this->cols());

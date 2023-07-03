@@ -29,6 +29,7 @@ private:
 public:
 
     Matrix(int m, int n);
+    Matrix(std::initializer_list<std::initializer_list<double>> list);
 
     int rows(void) const { return static_cast<int>(data_.size()); };
     int cols(void) const { return static_cast<int>(data_[0].size()); };
