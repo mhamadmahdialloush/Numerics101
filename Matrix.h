@@ -38,6 +38,9 @@ public:
     vector<double>& operator[] (int i) { return data_[i]; };
     const vector<double>& operator[] (int i) const { return data_[i]; };
 
+
+    Matrix& operator*=(const double s);
+
     double determinant();
     Matrix inverse();
 

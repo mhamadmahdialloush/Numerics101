@@ -32,6 +32,26 @@ Matrix::Matrix(std::initializer_list<std::initializer_list<double>> list)
 	}
 }
 
+
+Matrix& Matrix::operator*=(const double s)
+{
+	Matrix& A = (*this);
+
+	int m = A.rows();
+	int n = A.cols();
+
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			A[i][j] *= s;
+		}
+	}
+
+	return A;
+}
+
+
 double Matrix::determinant()
 {
 	return determinant((*this), this->cols());
@@ -182,7 +202,6 @@ Vector operator*(const Matrix& A, const Vector& v)
 
 Matrix operator*(const Matrix& A1, const Matrix& A2)
 {
-
 	if (A1.cols() == A2.rows())
 	{
 		int m = A1.rows();
@@ -205,23 +224,25 @@ Matrix operator*(const Matrix& A1, const Matrix& A2)
 	}
 	else
 	{
-		cout << "The multiplication is not accepted as the number of coloumns of the first matrix does not equal the number of rows of the 2nd matrix";
+		cout << "The multiplication is not accepted as the number of coloumns of the first matrix does not equal the number of rows of the 2nd matrix" << endl;
+		exit(1);
 	}
 }
 
-Matrix operator*(const Matrix& A_, const double s)
+Matrix operator*(const Matrix& A, const double s)
 {
-	int m = A_.rows();
-	int n = A_.cols();
-	Matrix A(m, n);
+	int m = A.rows();
+	int n = A.cols();
+
+	Matrix A_out(m, n);
 	for (int i =0 ; i < m; i++)
 	{
 		for (int j = 0; j < n; j++)
 		{
-			A[i][j]=A_[i][j]*s;
+			A_out[i][j] = A[i][j] * s;
 		}
 	}
-	return A;
+	return A_out;
 }
 
 ostream& operator<<(ostream& os, const Matrix& A)
@@ -241,7 +262,6 @@ void Matrix::lu_decomposition(Matrix& L, Matrix& U)
 {
 	Matrix& A = *this;
 	int n = A.rows();
-
 
 	int i = 0, j = 0, k = 0;
 	for (i = 0; i < n; i++)
