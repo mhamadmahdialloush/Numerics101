@@ -55,4 +55,4 @@ Matrix operator*(const Matrix& A, const double s);
 ostream& operator<<(ostream& os, const Matrix& A);
 
 
-#endif // !Matrix_h
+#endif // Matrix_h

@@ -120,6 +120,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CSRMatrix.cpp" />
     <ClCompile Include="DirectSolver.cpp" />
     <ClCompile Include="GaussSeidelSolver.cpp" />
     <ClCompile Include="JacobiSolver.cpp" />
@@ -130,6 +131,7 @@
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CSRMatrix.h" />
     <ClInclude Include="DirectSolver.h" />
     <ClInclude Include="GaussSeidelSolver.h" />
     <ClInclude Include="JacobiSolver.h" />

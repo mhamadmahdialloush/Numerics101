@@ -37,6 +37,11 @@ public:
         }
     }
 
+    Vector(std::initializer_list<double> list) : vector<double>(list)
+    {
+
+    }
+
     Vector& operator=(const Vector& v);
     Vector& operator=(const double val);
 

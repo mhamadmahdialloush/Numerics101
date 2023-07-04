@@ -1,4 +1,4 @@
-	// Include built-in libraries
+// Include built-in libraries
 #include <iostream>
 #include <fstream>
 
@@ -9,18 +9,21 @@
 #include "GaussSeidelSolver.h"
 #include "JacobiSolver.h"
 #include "SORSolver.h"
+#include "CSRMatrix.h"
 
 using namespace std;
 
 
 void TestMatrixOperations(); // Matrix operations
+void TestSparseMatrixOperations();
 void TestSolvers(); // Solvers for linear systems 
 void TestSSHeatEquation();
 void TestMatrixMultiplication();
 
 int main()
 {
-	TestMatrixOperations();
+	//TestMatrixOperations();
+	TestSparseMatrixOperations();
 	//TestSolvers();
 	//TestSSHeatEquation();
 	//TestMatrixMultiplication();
@@ -125,6 +128,30 @@ void TestMatrixOperations()
 	cout << "Inverse:" << endl << A1.inverse() << endl;
 	cout << "Determinant: " << A1.determinant() << endl;
 	cout << "A1 x " << s1 << " = " << endl << A1 * s1 << endl;
+}
+
+void TestSparseMatrixOperations()
+{
+	Matrix A
+	(
+		{
+			{1,0,0,2},
+			{5,0,3,1},
+			{6,8,0,0},
+			{0,0,0,4}
+		}
+	);
+
+	cout << "A:" << endl << A << endl;
+
+	CSRMatrix Asparse({ 1, 2, 5, 3, 1, 6, 8, 4 }, { 0, 2, 5, 7, 8 }, { 0, 3, 0, 2, 3, 0, 1, 3 });
+
+	cout << "Asparse:" << endl << Asparse << endl;
+
+	Vector v({ 1,2,3,4 });
+
+	cout << "A x v:" << endl << A * v << endl;
+	cout << "Asparse x v:" << endl << Asparse * v << endl;
 }
 
 void TestSolvers()
