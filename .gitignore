@@ -45,7 +45,6 @@ Generated\ Files/
 *.sln
 *.vcxproj*
 *.json
-*.txt
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
