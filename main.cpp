@@ -1,6 +1,7 @@
 // Include built-in libraries
 #include <iostream>
 #include <fstream>
+#include <cmath>
 
 // Include all non built-in header files 
 #include "Matrix.h"

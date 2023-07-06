@@ -1,4 +1,5 @@
 #include "Solver.h"
+#include <cmath>
 
 
 Solver::Solver(Matrix& A, Vector& x, Vector& b, linear_solver solver) : A_(A), x_(x), b_(b), solver_(solver)
