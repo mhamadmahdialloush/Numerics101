@@ -48,38 +48,24 @@ ostream& operator<<(ostream& os, const CSRMatrix& A)
 	const vector<int>& col_indices = A.col_indices();
 
 	int n_rows = A.rows();
-
-	// Calculate the number of coloumns. This might be wrong in
-	// certain rare situations when the last columns of the matrix
-	// have no non-zeros
-	int n_cols = 0;
-	for (int i = 0; i < col_indices.size(); i++)
-	{
-		if (col_indices[i] > n_cols)
-		{
-			n_cols = col_indices[i];
-		}
-	}
-	n_cols++;
+	int n_cols = A.cols();
 
 	int current = 0; // index for data array
 
 	for (int i = 0; i < n_rows; i++) 
 	{
-		for (int j = 0; j < n_cols; j++) 
-		{
-			if (current < offsets[i + 1] && j == col_indices[current]) 
-			{
+		for (int j = 0; j < n_cols; j++) {
+			if (current < offsets[i + 1] && j == col_indices[current]) {
 				os << data[current] << "\t";
 				current++;
 			}
-			else 
-			{
-				os << "0\t";
+			else {
+				os<< "0 \t";
 			}
 		}
-		os << endl << endl;
+		os << endl<<endl;
+
 	}
-	
+
 	return os;
 }

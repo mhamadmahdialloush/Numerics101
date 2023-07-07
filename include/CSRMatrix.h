@@ -34,6 +34,14 @@ public:
 	const vector<int>& col_indices() const { return col_indices_; }
 
 	const int rows() const { return (offsets_.size()-1); }
+		const int cols() const { 
+		int n_cols = 0;
+		for (int i = 0; i < col_indices_.size(); i++)
+		{
+			if (col_indices_[i] > n_cols) {	n_cols = col_indices_[i]; }
+		}
+		return (n_cols + 1);
+	}
 };
 
 Vector operator*(const CSRMatrix& A, const Vector& v);
