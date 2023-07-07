@@ -48,35 +48,31 @@ ostream& operator<<(ostream& os, const CSRMatrix& A)
 	const vector<int>& col_indices = A.col_indices();
 
 	int n_rows = A.rows();
-
-	for (int i = 0; i < n_rows; i++)
+	// Calculate the number of coloumns.
+	int n_cols = 0;
+	for (int i = 0; i < size(col_indices); i++)
 	{
-		// pre-zeros
-		for (int jj = 0; jj < col_indices[offsets[i]]; jj++)
+		if (col_indices[i] > n_cols)
 		{
-			os << 0 << "\t";
+			n_cols = col_indices[i];
 		}
+	}
+	n_cols++;
 
-		for (int j = offsets[i]; j < offsets[i + 1]-1; j++)
-		{
-			int col_index = col_indices[j];
+	int current = 0; // index for data array
 
-			os << data[j] << "\t";
-
-			// in-between zeros
-			for (int jj=col_indices[j]+1; jj<col_indices[j+1]; jj++)
-			{
-				os << 0 << "\t";
+	for (int i = 0; i < n_rows; i++) 
+	{
+		for (int j = 0; j < n_cols; j++) {
+			if (current < offsets[i + 1] && j == col_indices[current]) {
+				os << data[current] << "\t";
+				current++;
+			}
+			else {
+				os<< "0 \t";
 			}
 		}
-
-		//// post-zeros // BODGEEEE
-		//for (int jj = col_indices[offsets[i + 1]]; jj < col_indices[offsets[i + 1] - 1]; jj++)
-		//{
-		//	os << 0 << "\t";
-		//}
-
-		os << data[offsets[i+1]-1] << endl << endl;
+		os << endl<<endl;
 	}
 	return os;
 }
