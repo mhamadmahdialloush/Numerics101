@@ -17,6 +17,9 @@ private:
 	vector<int> offsets_;
 	vector<int> col_indices_;
 
+	int rows_;
+	int cols_;
+
 
 public:
 
@@ -33,15 +36,11 @@ public:
 	vector<int>& col_indices() { return col_indices_; };
 	const vector<int>& col_indices() const { return col_indices_; }
 
-	const int rows() const { return (offsets_.size()-1); }
-		const int cols() const { 
-		int n_cols = 0;
-		for (int i = 0; i < col_indices_.size(); i++)
-		{
-			if (col_indices_[i] > n_cols) {	n_cols = col_indices_[i]; }
-		}
-		return (n_cols + 1);
-	}
+	const int rows() const { return rows_; }
+	const int cols() const { return cols_; }
+
+	void set_rows(int rows) { rows_ = rows; }
+	void set_cols(int cols) { cols_ = cols; }
 };
 
 Vector operator*(const CSRMatrix& A, const Vector& v);
