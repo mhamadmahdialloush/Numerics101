@@ -39,6 +39,7 @@ CSRMatrix::CSRMatrix(const vector<double>& data, const vector<int>& offsets, con
 			cols_ = col_indices_[i]; 
 		}
 	}
+	cols_++;
 }
 
 
