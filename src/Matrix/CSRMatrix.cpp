@@ -81,7 +81,12 @@ ostream& operator<<(ostream& os, const CSRMatrix& A)
 	{
 		for (int j = 0; j < n_cols; j++) 
 		{
-			if (current < offsets[i + 1] && j == col_indices[current]) 
+			if (current < offsets[i + 1] && j == col_indices[current]&& i != n_rows-1) 
+			{
+				os << data[current] << "\t";
+				current++;
+			}
+			else if(j == col_indices[current] && i == n_rows-1)
 			{
 				os << data[current] << "\t";
 				current++;
