@@ -2,6 +2,9 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <vector>
+#include <string>
+#include <mpi.h>
 
 // Include all non built-in header files 
 #include "Matrix.h"
@@ -11,9 +14,13 @@
 #include "JacobiSolver.h"
 #include "SORSolver.h"
 #include "CSRMatrix.h"
+#include "PetscSolver.h"
 
 using namespace std;
 
+
+void TestParBlockCRSPetscSolver(int argc, char **argv);
+void TestSerBlockCRSPetscSolver(int argc, char **argv);
 
 void TestMatrixOperations(); // Matrix operations
 void TestSparseMatrixOperations();
@@ -21,10 +28,11 @@ void TestSolvers(); // Solvers for linear systems
 void TestSSHeatEquation();
 void TestMatrixMultiplication();
 
-int main()
+int main(int argc, char **argv)
 {
+	TestParBlockCRSPetscSolver(argc, argv);
 	//TestMatrixOperations();
-	TestSparseMatrixOperations();
+	//TestSparseMatrixOperations();
 	//TestSolvers();
 	//TestSSHeatEquation();
 	//TestMatrixMultiplication();
@@ -325,3 +333,193 @@ void TestSSHeatEquation()
     out.close();
 
 }
+
+
+void TestSerBlockCRSPetscSolver(int argc, char **argv)
+{
+    // This is the sparse parallel matrix:
+    
+    //  ----            -----
+    // |3   0|  0  0   |1   0|
+    // |0  -2|  0  0   |0  -1|
+    //  ----            ------
+    //         ------               
+    //  0  0   |5  0|   0   0
+    //  0  0   |0  4|   0   0
+    //         ------
+    //  ----    ----    -----
+    // |1  0|  |1  0|  |3   0|      
+    // |0 -3|  |0 -1|  |0   2|
+    //  ----    ----    -----
+
+
+    // This is the rhs vector
+
+	//  -1
+	//   0.5
+	//  -0.5
+	//   1
+	//   1  
+	// 0.5
+
+
+    // the expected solution:
+
+	// -1.19445
+	// -1.11683
+	// -0.181542
+	// 0.453856
+	// 1.37124
+	// -0.872093
+
+    
+    // Initialize PETSc
+    PetscInitialize(&argc, &argv, NULL, NULL);
+
+    PetscInt i[] = {0, 2, 3, 6}; // Indices into j for the start of each local row
+    PetscInt j[] = {0, 2, 1, 0, 1, 2}; // Column indices for each local row (block positions)
+    PetscScalar v[] = {3,0,0,-2,1,0,0,-1,5,0,0,4,1,0,0,-3,1,0,0,-1,3,0,0,2}; // Optional values in the matrix
+
+    std::vector<PetscScalar> rhs = {-1,0.5,-0.5,1,1,0.5};
+    std::vector<PetscScalar> sol = {0,0,0,0,0,0}; // initially 0
+
+    // solve
+    {
+	    PetscSolver<2> solver(3,3,i,j,v);
+	    solver.solve(sol.data(), rhs.data());
+    }
+
+    // print solution
+    std::cout << sol << std::endl;
+
+    // Finalize PETSc
+    PetscFinalize();
+}
+
+
+
+
+
+void TestParBlockCRSPetscSolver(int argc, char **argv)
+{
+    // This is the sparse parallel matrix:
+    
+    //  ----            -----
+    // |3   0|  0  0   |1   0|
+    // |0  -2|  0  0   |0  -1|
+    //  ----            ------
+    //         ------               partition 0
+    //  0  0   |5  0|   0   0
+    //  0  0   |0  4|   0   0
+    //         ------
+	// -----------------------------------------
+    //  ----    ----    -----
+    // |1  0|  |1  0|  |3   0|      partition 1
+    // |0 -3|  |0 -1|  |0   2|
+    //  ----    ----    -----
+
+
+    // This is the rhs vector
+
+	//  -1
+	//   0.5     partition 0
+	//  -0.5
+	//   1
+	// ------
+	//   1       partition 1
+	// 0.5
+
+
+    // the expected solution:
+
+	// -1.19445
+	// -1.11683      partition 0
+	// -0.181542
+	// 0.453856
+	// -----------------------------------------
+	// 1.37124       partition 1
+	// -0.872093
+
+    
+    // Initialize PETSc
+    PetscInitialize(&argc, &argv, NULL, NULL);
+
+    PetscMPIInt    rank;
+    
+    MPI_Comm_rank(PETSC_COMM_WORLD, &rank);
+
+    int m; // number of local block rows of paritioned matrix
+    int nnz; // number of nonzero blocks in the partitioned matrix
+    const int bs = 2; // block size
+
+    if(rank==0)
+    {
+    	m = 2;
+    	nnz = 3;
+    } 
+    else if(rank==1)
+    {
+    	m = 1;
+    	nnz = 3;
+    }
+
+    PetscInt i[m+1];
+    PetscInt j[nnz];
+    PetscScalar v[nnz*bs*bs];
+
+	std::vector<PetscScalar> sol(m*bs);
+    std::vector<PetscScalar> rhs(m*bs);
+
+    if(rank==0)
+    {
+	    double i_values[] = {0, 2, 3};
+	    std::copy(std::begin(i_values), std::end(i_values), i);
+
+	    double j_values[] = {0, 2, 1};
+	    std::copy(std::begin(j_values), std::end(j_values), j);
+
+	    double v_values[] = {3,0,0,-2,1,0,0,-1,5,0,0,4};
+	    std::copy(std::begin(v_values), std::end(v_values), v);
+
+	    double sol_values[] = {0,0,0,0};
+	    std::copy(std::begin(sol_values), std::end(sol_values), sol.data());	    
+
+	    double rhs_values[] = {-1,0.5,-0.5,1};
+	    std::copy(std::begin(rhs_values), std::end(rhs_values), rhs.data());	    	    
+	    
+    } 
+    else if(rank==1)
+    {
+	    double i_values[] = {0, 3};
+	    std::copy(std::begin(i_values), std::end(i_values), i);
+
+	    double j_values[] = {0, 1, 2};
+	    std::copy(std::begin(j_values), std::end(j_values), j);
+
+	    double v_values[] = {1,0,0,-3,1,0,0,-1,3,0,0,2};
+	    std::copy(std::begin(v_values), std::end(v_values), v);
+
+	    double sol_values[] = {0,0};
+	    std::copy(std::begin(sol_values), std::end(sol_values), sol.data());	    
+
+	    double rhs_values[] = {1,0.5};
+	    std::copy(std::begin(rhs_values), std::end(rhs_values), rhs.data());
+    }
+
+    // solve
+    {
+	    PetscSolver<bs> solver(m,m,i,j,v);
+	    solver.solve(sol.data(), rhs.data());
+
+	    solver.write_matrix("matrix.txt", true);
+	    solver.write_matrix("matrix_bin.txt", false);
+	    solver.write_rhs("source.txt", true);
+
+	    // print solution
+		std::cout << sol << std::endl;      
+    }
+
+    // Finalize PETSc
+    PetscFinalize();
+}
+
