@@ -43,7 +43,7 @@ void PetscSolver<bs>::solve(PetscScalar sol[], PetscScalar rhs[])
 
     KSPSetType(ksp_, KSPFGMRES); // Try a different solver type (flexible GMRES)
     KSPSetTolerances(ksp_, 0.01, 1e-9, PETSC_DEFAULT, 10);
-    KSPSetInitialGuessNonzero(ksp_, PETSC_TRUE);      
+    KSPSetInitialGuessNonzero(ksp_, PETSC_TRUE); 
 
     // Solve A x = b
     KSPSolve(ksp_, rhs_, sol_);
@@ -52,7 +52,7 @@ void PetscSolver<bs>::solve(PetscScalar sol[], PetscScalar rhs[])
     KSPGetIterationNumber(ksp_, &nIters); 
 
     // Compute the residual norm
-    PetscReal res;
+    PetscScalar res;
     KSPGetResidualNorm(ksp_, &res);
 
     int rank;
@@ -68,9 +68,9 @@ void PetscSolver<bs>::solve(PetscScalar sol[], PetscScalar rhs[])
 
 
 template<size_t bs>
-void PetscSolver<bs>::update_row(PetscInt row_index, PetscInt col_indices[], PetscScalar vals[])
+void PetscSolver<bs>::update_row(PetscInt row_index, PetscInt n_cols, PetscInt col_indices[], PetscScalar vals[])
 {
-    MatSetValuesBlocked(A_, 1, &row_index, 1, col_indices, vals, INSERT_VALUES); 
+    MatSetValuesBlocked(A_, 1, &row_index, n_cols, col_indices, vals, INSERT_VALUES); 
 
     // Essential after setting values: assemble the matrix
     MatAssemblyBegin(A_, MAT_FINAL_ASSEMBLY);
