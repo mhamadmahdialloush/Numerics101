@@ -3,7 +3,9 @@
 ---------------------------------------------------------------
 Overview
 ---------------------------------------------------------------
-This package is a basic C++ package which serves as a learning <br> tool for fundamental numerical computations techniques.
+This package is a basic C++ package which serves as a learning <br> 
+tool for fundamental numerical computations techniques. It involves examples <br> 
+on the use of the PETSc solver to solve block CSR matrices in serial and in parallel.
 
 
 ---------------------------------------------------------------
