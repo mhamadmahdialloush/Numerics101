@@ -70,7 +70,10 @@ void PetscSolver<bs>::solve(PetscScalar sol[], PetscScalar rhs[])
 template<size_t bs>
 void PetscSolver<bs>::update_row(PetscInt row_index, PetscInt n_cols, PetscInt col_indices[], PetscScalar vals[])
 {
-    MatSetValuesBlocked(A_, 1, &row_index, n_cols, col_indices, vals, INSERT_VALUES); 
+    for(int j=0; j<n_cols; j++)
+    {
+        MatSetValuesBlocked(A_, 1, &row_index, 1, &col_indices[j], &vals[bs*bs*j], INSERT_VALUES); 
+    }
 
     // Essential after setting values: assemble the matrix
     MatAssemblyBegin(A_, MAT_FINAL_ASSEMBLY);

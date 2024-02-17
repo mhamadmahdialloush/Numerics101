@@ -76,6 +76,19 @@ int main(int argc, char **argv)
         
 	    PetscSolver<2> solver(n_rows,n_cols,i,j,v);
 	    solver.solve(sol.data(), rhs.data());
+
+        // perform an update
+        {             
+            // PetscInt row_index = 0;
+            // PetscInt n_cols = 2;
+            // PetscInt col_indices[] = {0,2};
+            // PetscScalar values[] = {8,3,2,7,10,11,12,13};
+
+            // solver.update_row(row_index, n_cols, col_indices, values);   
+        }
+
+        // write matrix to file
+        solver.write_matrix("matrix.txt", true);
     }
 
     // print solution
