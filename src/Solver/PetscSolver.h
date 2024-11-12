@@ -48,6 +48,8 @@ public:
 
     void update_row(PetscInt row_index, PetscInt n_cols, PetscInt col_indices[], PetscScalar vals[]);
 
+    void update_values(PetscScalar vals[], PetscInt nnz);
+
 
     // IO
 

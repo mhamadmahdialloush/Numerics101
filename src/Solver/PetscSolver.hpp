@@ -82,6 +82,19 @@ void PetscSolver<bs>::update_row(PetscInt row_index, PetscInt n_cols, PetscInt c
 
 
 template<size_t bs>
+void PetscSolver<bs>::update_values(PetscScalar vals[], PetscInt nnz)
+{
+    PetscScalar *array;
+    MatSeqBAIJGetArray(A_, &array);   
+
+    for(int i=0; i<nnz*bs*bs; i++)
+    {
+        array[i] = vals[i];
+    } 
+}
+
+
+template<size_t bs>
 void PetscSolver<bs>::write_matrix(std::string file_name, bool ascii)
 {
     if(ascii)

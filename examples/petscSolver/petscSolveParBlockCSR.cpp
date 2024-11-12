@@ -135,6 +135,37 @@ int main(int argc, char **argv)
 	    } 
 
 	    PetscSolver<bs> solver(m,n,i,j,v);
+
+    	// int row_index = -1;
+    	// int n_cols = 0;
+    	// int col_indices[1];
+    	// double vals[4];
+
+	    // if(rank==0)
+	    // {	    	
+	    // 	row_index = 1;
+	    // 	n_cols = 1;
+	    // 	col_indices[0] = {1};
+
+	    // 	vals[0] = 5;
+	    // 	vals[1] = 0;
+	    // 	vals[2] = 0;
+	    // 	vals[3] = 4;
+	    // }
+
+	    // solver.update_row(row_index, n_cols, col_indices, vals);
+
+	    if(rank==0)
+	    {
+		    double v_values[] = {3,0,0,-2,1,0,0,-1,5,0,0,4};	    	    
+	    	solver.update_values(v_values, nnz);
+	    } 
+	    else if(rank==1)
+	    {
+		    double v_values[] = {1,0,0,-3,1,0,0,-1,3,0,0,2};    	    
+	    	solver.update_values(v_values, nnz);
+	    }	    
+    	
 	    solver.solve(sol.data(), rhs.data());
 
 	    // Write matrix and source in ascii format
